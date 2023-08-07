@@ -129,7 +129,7 @@ export default function SheetUploadDropZone() {
   }
 
   useEffect(() => {
-    console.log(workbook);
+    console.log(renderedTableContent);
     console.log(loadmoreCursor);
   });
 
@@ -159,25 +159,50 @@ export default function SheetUploadDropZone() {
         <input type='file' ref={fileRef} onChange={fileUploadHandler} />
       </div>
       {invalidFile && <p className={styles.invalid}>Invalid file</p>}
-      <div>
-        {renderedTableContent.map((element) => (
-          <>
-            <p key={element as string | number}>{element as ReactNode}</p>
-          </>
-        ))}
-        {!loadmoreCursor.endOfFile && renderedTableContent.length > 0 && (
-          <button
-            onClick={() => {
-              setRenderedTableContent(
-                loadMoreHandler(workbook, renderedTableContent, loadmoreCursor)
+      {workbook[0] && (
+        <section className={styles['table-section']}>
+          <table className={styles.table}>
+            <tr>
+              {(workbook[0].rows[0] as unknown as Array<string | number>).map(
+                (head) => (
+                  <th key={head} className={styles.th}>
+                    {head}
+                  </th>
+                )
+              )}
+            </tr>
+            {renderedTableContent.map((element) => {
+              const newElement = element as unknown as Array<string | number>;
+              return (
+                <tr key={element}>
+                  {newElement.map((element) => (
+                    <td key={element} className={styles.td}>
+                      {element}
+                    </td>
+                  ))}
+                </tr>
               );
-              increaseOffset();
-            }}
-          >
-            Load More
-          </button>
-        )}
-      </div>
+            })}
+          </table>
+          {!loadmoreCursor.endOfFile && renderedTableContent.length > 0 && (
+            <button
+              onClick={() => {
+                setRenderedTableContent(
+                  loadMoreHandler(
+                    workbook,
+                    renderedTableContent,
+                    loadmoreCursor
+                  )
+                );
+                increaseOffset();
+              }}
+              className={styles.loadmore}
+            >
+              Load More
+            </button>
+          )}
+        </section>
+      )}
     </>
   );
 }
