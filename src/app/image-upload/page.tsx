@@ -1,9 +1,9 @@
-import FileUploadDropZone from '@/components/FileUploadDropZone';
+import ImgUploadDropZone from '@/components/ImgUploadDropZone';
 
 export default function ImageUpload() {
   return (
     <>
-      <FileUploadDropZone />
+      <ImgUploadDropZone />
     </>
   );
 }

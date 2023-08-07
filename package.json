@@ -19,5 +19,8 @@
     "react-dom": "18.2.0",
     "typescript": "5.1.6",
     "xlsx": "^0.18.5"
+  },
+  "devDependencies": {
+    "@types/xlsx": "^0.0.36"
   }
 }

@@ -9,32 +9,32 @@
 import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 
-import styles from './FileUploadDropZone.module.css';
+import styles from './ImgUploadDropZone.module.css';
 
-type FileUploadDropZoneFileObject = {
+type ImgUploadDropZoneFileObject = {
   img: File | null;
   imgUrl: string;
   imgName: string;
 };
 
-export default function FileUploadDropZone() {
-  const [imgObject, setImgObject] = useState<FileUploadDropZoneFileObject>({
+export default function ImgUploadDropZone() {
+  const [imgObject, setImgObject] = useState<ImgUploadDropZoneFileObject>({
     img: null,
     imgUrl: '',
     imgName: '',
   });
-  const [dropZoneEnter, setDropZoneEnter] = useState(false);
-  const [fileUploadIcon, setFileUploadIcon] = useState('/image (1).png');
-  const [invalidFile, setInvalidFile] = useState(false);
-  const fileUploadRef = useRef<HTMLInputElement>(null);
+  const [imgDropZoneEnter, setImgDropZoneEnter] = useState(false);
+  const [imgUploadIcon, setImgUploadIcon] = useState('/image (1).png');
+  const [invalidImgFile, setInvalidImgFile] = useState(false);
+  const imgUploadRef = useRef<HTMLInputElement>(null);
 
-  const fileImageClickHandler = () => {
-    if (fileUploadRef.current) {
-      fileUploadRef.current.click();
+  const imgDropZoneClickHandler = () => {
+    if (imgUploadRef.current) {
+      imgUploadRef.current.click();
     }
   };
 
-  const fileUploadHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const imgUploadHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       const img = e.target.files[0];
       const isValid = imgFileValidator(img);
@@ -44,14 +44,14 @@ export default function FileUploadDropZone() {
           imgUrl: URL.createObjectURL(img),
           imgName: img.name,
         });
-        setInvalidFile(false);
+        setInvalidImgFile(false);
       } else {
-        setInvalidFile(true);
+        setInvalidImgFile(true);
       }
     }
   };
 
-  const fileDropHandler = (e: React.DragEvent) => {
+  const imgDropHandler = (e: React.DragEvent) => {
     dragLeave(e);
     const img = e.dataTransfer.files[0];
     const isValid = imgFileValidator(img);
@@ -61,18 +61,18 @@ export default function FileUploadDropZone() {
         imgUrl: URL.createObjectURL(img),
         imgName: img.name,
       });
-      setInvalidFile(false);
+      setInvalidImgFile(false);
     } else {
-      setInvalidFile(true);
+      setInvalidImgFile(true);
     }
   };
 
-  const dropZoneHandler = (e: React.DragEvent) => {
+  const imgDropZoneHandler = (e: React.DragEvent) => {
     // This changes the color && image to the
     // highlight color and image
     preventDefault(e);
-    setDropZoneEnter(true);
-    setFileUploadIcon('/image.png');
+    setImgDropZoneEnter(true);
+    setImgUploadIcon('/image.png');
     setImgObject({
       img: null,
       imgUrl: '',
@@ -84,8 +84,8 @@ export default function FileUploadDropZone() {
     // This changes the highlight color && image back
     // to their initial color && image
     preventDefault(e);
-    setDropZoneEnter(false);
-    setFileUploadIcon('/image (1).png');
+    setImgDropZoneEnter(false);
+    setImgUploadIcon('/image (1).png');
   };
 
   const preventDefault = (e: React.DragEvent) => {
@@ -104,38 +104,38 @@ export default function FileUploadDropZone() {
     <>
       <div
         className={
-          !dropZoneEnter
-            ? styles['file-upload-drop-zone']
-            : `${styles['file-upload-drop-zone']} ${styles['highlight']}`
+          !imgDropZoneEnter
+            ? styles['img-upload-drop-zone']
+            : `${styles['img-upload-drop-zone']} ${styles['highlight']}`
         }
-        onDrop={fileDropHandler}
+        onDrop={imgDropHandler}
         onDragEnd={preventDefault}
-        onDragOver={dropZoneHandler}
+        onDragOver={imgDropZoneHandler}
         onDrag={preventDefault}
-        onDragEnter={dropZoneHandler}
+        onDragEnter={imgDropZoneHandler}
         onDragLeave={dragLeave}
       >
         {
           // eslint-disable-next-line @next/next/no-img-element
           <img
-            src={fileUploadIcon}
-            alt='drop-zone'
-            onClick={fileImageClickHandler}
+            src={imgUploadIcon}
+            alt='img-drop-zone'
+            onClick={imgDropZoneClickHandler}
           />
         }
 
         <p>Drop file here or click on image to upload file</p>
         <input
           type='file'
-          ref={fileUploadRef}
-          onChange={fileUploadHandler}
+          ref={imgUploadRef}
+          onChange={imgUploadHandler}
           multiple
         />
       </div>
-      {!invalidFile && imgObject.img !== null && (
+      {!invalidImgFile && imgObject.img !== null && (
         <Upload imgObject={imgObject} styles={styles} />
       )}
-      {invalidFile && <p className={styles.invalid}>Invalid file</p>}
+      {invalidImgFile && <p className={styles.invalid}>Invalid file</p>}
     </>
   );
 }
@@ -150,7 +150,7 @@ function imgFileValidator(file: File) {
 }
 
 type UploadProps = {
-  imgObject: FileUploadDropZoneFileObject;
+  imgObject: ImgUploadDropZoneFileObject;
   styles: { [key: string]: string };
 };
 

@@ -1,0 +1,59 @@
+.file-upload-drop-zone {
+  box-sizing: border-box;
+  background-color: white;
+  margin: 20px auto;
+  border: 1px dashed rgb(12, 12, 12);
+  max-width: 380px;
+  width: 85%;
+  padding: 20px;
+}
+
+.file-upload-drop-zone img {
+  display: block;
+  margin: 0 auto;
+  width: 50%;
+}
+
+.file-upload-drop-zone p {
+  font-size: clamp(0.6rem, calc(0.6rem + 0.5vw), 0.8rem);
+}
+
+.file-upload-drop-zone button {
+  cursor: pointer;
+  display: inline-block;
+  background-color: transparent;
+  border-style: none;
+  text-decoration: underline;
+  color: rgb(104, 72, 194);
+}
+
+.file-upload-drop-zone input {
+  display: none;
+}
+
+.highlight {
+  background-color: rgba(57, 108, 232, 0.1);
+  border: 1px dashed rgba(57, 108, 232, 0.5);
+}
+
+.highlight p {
+  color: rgb(57, 108, 232);
+}
+
+.invalid {
+  background-color: white;
+  color: #c90909;
+  box-sizing: border-box;
+  font-size: clamp(0.6rem, calc(0.6rem + 0.5vw), 0.8rem);
+  margin: 20px auto;
+  border-radius: 10px;
+  padding: 10px;
+  width: 85%;
+  max-width: 380px;
+}
+
+@media screen and (max-width: 500px) {
+  .file-upload-drop-zone {
+    padding: 5%;
+  }
+}
