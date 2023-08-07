@@ -45,12 +45,8 @@ export default function SheetUploadDropZone() {
   };
 
   const checkFile = (file: File) => {
-    const isValid = FileValidator(file);
+    const isValid = fileValidator(file);
     if (isValid) {
-      setLoadmoreCursor(() => {
-        return { current: 1, next: 50, endOfFile: false };
-      });
-      setRenderedTableContent([]);
       fileHandler(file);
       setInvalidFile(false);
     } else {
@@ -68,13 +64,17 @@ export default function SheetUploadDropZone() {
           const parseWorkbookData = parseWorkbook(data);
           setWorkbook(parseWorkbookData);
           setRenderedTableContent(
-            loadMoreHandler(
-              parseWorkbookData,
-              renderedTableContent,
-              loadmoreCursor
-            )
+            loadMoreHandler(parseWorkbookData, [], {
+              current: 1,
+              next: 50,
+              endOfFile: false,
+            })
           );
-          if (!loadmoreCursor.endOfFile) increaseOffset();
+          setLoadmoreCursor({
+            current: 1,
+            next: 50,
+            endOfFile: false,
+          });
         }
       };
 
@@ -131,7 +131,6 @@ export default function SheetUploadDropZone() {
   useEffect(() => {
     console.log(workbook);
     console.log(loadmoreCursor);
-    console.log(renderedTableContent);
   });
 
   return (
@@ -198,7 +197,7 @@ function parseWorkbook(data: ArrayBuffer) {
   return sheets;
 }
 
-function FileValidator(file: File): boolean {
+function fileValidator(file: File): boolean {
   let fileType = file.type.split('/');
   if (fileType[0] === 'text' && fileType[1] === 'csv') {
     return true;
