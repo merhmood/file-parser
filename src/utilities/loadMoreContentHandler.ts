@@ -10,7 +10,7 @@ export default function loadMoreHandler(
   loadmoreCursor: LoadmoreCursor
 ) {
   let result = [...tableContent];
-  // Add new contents to tableContent
+  // Add more contents to tableContent
   for (
     let start = loadmoreCursor.current;
     start <= loadmoreCursor.next;
