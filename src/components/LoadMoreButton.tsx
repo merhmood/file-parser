@@ -1,5 +1,5 @@
 import { LoadMoreButtonProps } from '@/types/sheetDropZoneTypes';
-import loadMoreHandler from '@/utilities/loadMoreHandler';
+import loadMoreContentHandler from '@/utilities/loadMoreContentHandler';
 import styles from '@/components/SheetUploadDropZone.module.css';
 
 export default function LoadMoreButton(props: LoadMoreButtonProps) {
@@ -14,7 +14,7 @@ export default function LoadMoreButton(props: LoadMoreButtonProps) {
     <button
       onClick={() => {
         setTableContent(
-          loadMoreHandler(workbook, tableContent, loadmoreCursor)
+          loadMoreContentHandler(workbook, tableContent, loadmoreCursor)
         );
         increaseOffset();
       }}

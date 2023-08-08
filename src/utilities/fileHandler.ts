@@ -5,7 +5,7 @@ import {
 } from '@/types/sheetDropZoneTypes';
 
 import parseWorkbook from './parseWorkbook';
-import loadMoreHandler from './loadMoreHandler';
+import loadMoreHandler from './loadMoreContentHandler';
 
 export default function fileHandler(
   file: File,
@@ -22,9 +22,10 @@ export default function fileHandler(
         const data = new Uint8Array(e.target.result);
         const parseWorkbookData = parseWorkbook(data);
         setWorkbook(parseWorkbookData);
-        // mounts an empty list
+        // Mounts an empty list
         setRenderedTableContent([]);
-        // updates the empty list with newly upload contents
+        // Updates the empty list with newly upload contents,
+        // which will be limited to 50 elements
         setTimeout(() => {
           setRenderedTableContent(() =>
             loadMoreHandler(parseWorkbookData, [], {

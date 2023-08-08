@@ -15,13 +15,16 @@ export default function TableSection(props: TableSectionProps) {
     <section className={styles['table-section']}>
       <table className={styles.table}>
         <tr>
-          {(workbook[0].rows[0] as unknown as Array<string | number>).map(
-            (head) => (
-              <th key={head} className={styles.th}>
-                {head}
-              </th>
+          {
+            // Renders the table header
+            (workbook[0].rows[0] as unknown as Array<string | number>).map(
+              (head) => (
+                <th key={head} className={styles.th}>
+                  {head}
+                </th>
+              )
             )
-          )}
+          }
         </tr>
         {
           // Renders the table body

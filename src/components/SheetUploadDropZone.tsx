@@ -21,6 +21,9 @@ export default function SheetUploadDropZone() {
   const [tableContent, setTableContent] = useState<ArrayOfNumberAndString>([]);
   const [invalidFile, setInvalidFile] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
+
+  // Triggers the click event on the hidden
+  // input element of type file
   const uploadButtonClick = () => {
     if (fileRef.current) fileRef.current.click();
   };
