@@ -1,6 +1,6 @@
-export type Sheets = { name: string; rows: Array<string | number> };
+export type Sheets = { name: string; rows: Array<Array<string | number>> };
 
-export type ArrayOfNumberAndString = Array<number | string>;
+export type ArrayOfNumberAndString = Array<Array<number | string>>;
 
 export type LoadmoreCursor = {
   current: number;

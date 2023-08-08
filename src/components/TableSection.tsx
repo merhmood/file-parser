@@ -17,22 +17,20 @@ export default function TableSection(props: TableSectionProps) {
         <tr>
           {
             // Renders the table header
-            (workbook[0].rows[0] as unknown as Array<string | number>).map(
-              (head) => (
-                <th key={head} className={styles.th}>
-                  {head}
-                </th>
-              )
-            )
+            workbook[0].rows[0].map((head) => (
+              <th key={head} className={styles.th}>
+                {head}
+              </th>
+            ))
           }
         </tr>
         {
           // Renders the table body
           tableContent.length > 0 &&
             tableContent.map((element) => {
-              const newElement = element as unknown as Array<string | number>;
+              const newElement = element;
               return (
-                <tr key={element}>
+                <tr key={element[0]}>
                   {newElement.map((element) => (
                     <td key={element} className={styles.td}>
                       {element}
