@@ -1,257 +1,60 @@
 'use client';
 
-import { ReactNode, useEffect, useRef, useState } from 'react';
-import * as XLSX from 'xlsx';
+import { useRef, useState } from 'react';
 
+import DropZone from '@/components/DropZone';
+import {
+  Sheets,
+  ArrayOfNumberAndString,
+  LoadmoreCursor,
+} from '@/types/sheetDropZoneTypes';
+import TableSection from '@/components/TableSection';
 import styles from './SheetUploadDropZone.module.css';
-
-type Sheets = { name: string; rows: Array<string | number> };
-type ArrayOfNumberAndString = Array<number | string>;
-type LoadmoreCursor = {
-  current: number;
-  next: number;
-  endOfFile: boolean;
-};
 
 export default function SheetUploadDropZone() {
   const [workbook, setWorkbook] = useState<Sheets[]>([]);
-  const [fileDropZoneEnter, setFileDropZoneEnter] = useState(false);
-  const [fileUploadIcon, setFileUploadIcon] = useState('/upload (1).png');
-  const [loadmoreCursor, setLoadmoreCursor] = useState({
+  const [loadmoreCursor, setLoadmoreCursor] = useState<LoadmoreCursor>({
     current: 1,
     next: 50,
     endOfFile: false,
   });
-  const [renderedTableContent, setRenderedTableContent] =
-    useState<ArrayOfNumberAndString>([]);
+  const [tableContent, setTableContent] = useState<ArrayOfNumberAndString>([]);
   const [invalidFile, setInvalidFile] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
-
   const uploadButtonClick = () => {
     if (fileRef.current) fileRef.current.click();
   };
 
-  const fileUploadHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
-      const file = e.target.files[0];
-      checkFile(file);
-    }
-  };
-
-  const fileDropHandler = (e: React.DragEvent) => {
-    dragLeave(e);
-    const file = e.dataTransfer.files[0];
-    checkFile(file);
-  };
-
-  const checkFile = (file: File) => {
-    const isValid = fileValidator(file);
-    if (isValid) {
-      fileHandler(file);
-      setInvalidFile(false);
-    } else {
-      setRenderedTableContent([]);
-      setInvalidFile(true);
-    }
-  };
-
-  const fileHandler = (file: File) => {
-    if (file) {
-      let reader = new FileReader();
-      reader.onload = (e) => {
-        if (e.target?.result && typeof e.target.result !== 'string') {
-          const data = new Uint8Array(e.target.result);
-          const parseWorkbookData = parseWorkbook(data);
-          setWorkbook(parseWorkbookData);
-          setRenderedTableContent(
-            loadMoreHandler(parseWorkbookData, [], {
-              current: 1,
-              next: 50,
-              endOfFile: false,
-            })
-          );
-          setLoadmoreCursor({
-            current: 1,
-            next: 50,
-            endOfFile: false,
-          });
-        }
-      };
-
-      reader.readAsArrayBuffer(file);
-    }
-  };
-
-  const fileDropZoneHandler = (e: React.DragEvent) => {
-    // This changes the color && image to the
-    // highlight color and image
-    preventDefault(e);
-    setFileDropZoneEnter(true);
-    setFileUploadIcon('/upload.png');
-  };
-
-  const dragLeave = (e: React.DragEvent) => {
-    // This changes the highlight color && image back
-    // to their initial color && image
-    preventDefault(e);
-    setFileDropZoneEnter(false);
-    setFileUploadIcon('/upload (1).png');
-  };
-
-  const preventDefault = (e: React.DragEvent) => {
-    // Stops the default element behaviour. This feature leads to
-    // the browser opening new tabs when the file is dropped in
-    // in the application window, to prevent that, the drag event
-    // default behaviour was prevented
-    e.preventDefault();
-  };
-
-  function increaseOffset() {
-    const next = loadmoreCursor.next;
-    const endOfWorkBookFile = workbook[0]?.rows.length - 1;
-    if (next < endOfWorkBookFile && next + 50 < endOfWorkBookFile) {
-      setLoadmoreCursor((state) => {
-        return {
-          current: state.current + 50,
-          next: state.next + 50,
-          endOfFile: false,
-        };
-      });
-    } else if (next < endOfWorkBookFile && next + 50 > endOfWorkBookFile) {
-      setLoadmoreCursor((state) => {
-        return {
-          current: state.current + 50,
-          next: endOfWorkBookFile,
-          endOfFile: true,
-        };
-      });
-    }
-  }
-
-  useEffect(() => {
-    console.log(renderedTableContent);
-    console.log(loadmoreCursor);
-  });
-
   return (
     <>
-      <div
-        className={
-          !fileDropZoneEnter
-            ? styles['file-upload-drop-zone']
-            : `${styles['file-upload-drop-zone']} ${styles['highlight']}`
-        }
-        onDrop={fileDropHandler}
-        onDragEnd={preventDefault}
-        onDragOver={fileDropZoneHandler}
-        onDrag={preventDefault}
-        onDragEnter={fileDropZoneHandler}
-        onDragLeave={dragLeave}
-      >
-        {
-          // eslint-disable-next-line @next/next/no-img-element
-          <img src={fileUploadIcon} alt='file-drop' />
-        }
-        <p>
-          Drag and Drop sheet (csv or excel file) or click
-          <button onClick={uploadButtonClick}>Upload</button>
-        </p>
-        <input type='file' ref={fileRef} onChange={fileUploadHandler} />
-      </div>
-      {invalidFile && <p className={styles.invalid}>Invalid file</p>}
-      {workbook[0] && (
-        <section className={styles['table-section']}>
-          <table className={styles.table}>
-            <tr>
-              {(workbook[0].rows[0] as unknown as Array<string | number>).map(
-                (head) => (
-                  <th key={head} className={styles.th}>
-                    {head}
-                  </th>
-                )
-              )}
-            </tr>
-            {renderedTableContent.map((element) => {
-              const newElement = element as unknown as Array<string | number>;
-              return (
-                <tr key={element}>
-                  {newElement.map((element) => (
-                    <td key={element} className={styles.td}>
-                      {element}
-                    </td>
-                  ))}
-                </tr>
-              );
-            })}
-          </table>
-          {!loadmoreCursor.endOfFile && renderedTableContent.length > 0 && (
-            <button
-              onClick={() => {
-                setRenderedTableContent(
-                  loadMoreHandler(
-                    workbook,
-                    renderedTableContent,
-                    loadmoreCursor
-                  )
-                );
-                increaseOffset();
-              }}
-              className={styles.loadmore}
-            >
-              Load More
-            </button>
-          )}
-        </section>
-      )}
+      <DropZone
+        {...{
+          uploadButtonClick,
+          fileRef,
+          setWorkbook,
+          setTableContent,
+          setLoadmoreCursor,
+          setInvalidFile,
+        }}
+      />
+      {
+        // Shows invalid file when text
+        invalidFile && <p className={styles.invalid}>Invalid file</p>
+      }
+      {
+        // Renders the table section
+        workbook[0] && (
+          <TableSection
+            {...{
+              workbook,
+              tableContent,
+              loadmoreCursor,
+              setTableContent,
+              setLoadmoreCursor,
+            }}
+          />
+        )
+      }
     </>
   );
 }
-
-function parseWorkbook(data: ArrayBuffer) {
-  const workbook = XLSX.read(data, { type: 'array' });
-  const sheets: Sheets[] = [];
-
-  workbook.SheetNames.forEach((sheetName) => {
-    const worksheet = workbook.Sheets[sheetName];
-    const rows = XLSX.utils.sheet_to_json(worksheet, { header: 1 }) as Array<
-      string | number
-    >;
-    sheets.push({ name: sheetName, rows });
-  });
-
-  return sheets;
-}
-
-function fileValidator(file: File): boolean {
-  let fileType = file.type.split('/');
-  if (fileType[0] === 'text' && fileType[1] === 'csv') {
-    return true;
-  } else {
-    if (fileType[0] === 'application') {
-      fileType = file.type.split('.');
-      if (fileType[fileType.length - 1] === 'sheet') {
-        return true;
-      } else {
-        return false;
-      }
-    } else {
-      return false;
-    }
-  }
-}
-
-const loadMoreHandler = (
-  workbook: Sheets[],
-  renderedTableContent: ArrayOfNumberAndString,
-  loadmoreCursor: LoadmoreCursor
-) => {
-  let result = [...renderedTableContent];
-  for (
-    let start = loadmoreCursor.current;
-    start <= loadmoreCursor.next;
-    start++
-  ) {
-    result.push(workbook[0]?.rows[start]);
-  }
-  return result;
-};

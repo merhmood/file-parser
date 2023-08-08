@@ -71,6 +71,7 @@
   overflow-x: scroll;
 }
 .loadmore {
+  cursor: pointer;
   margin: 10px 0;
   padding: 5px;
 }
