@@ -1,6 +1,4 @@
 import { CheckFileParameter } from '@/types/sheetDropZoneTypes';
-import fileValidator from '@/utilities/fileValidator';
-import fileHandler from '@/utilities/fileHandler';
 
 export default function checkFile(checkFileParameters: CheckFileParameter) {
   const {
@@ -9,6 +7,8 @@ export default function checkFile(checkFileParameters: CheckFileParameter) {
     setTableContent,
     setLoadmoreCursor,
     setInvalidFile,
+    fileValidator,
+    fileHandler,
   } = checkFileParameters;
   const isValid = fileValidator(file);
   if (isValid) {

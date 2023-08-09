@@ -39,4 +39,13 @@ export type CheckFileParameter = {
   setTableContent: React.Dispatch<React.SetStateAction<ArrayOfNumberAndString>>;
   setLoadmoreCursor: React.Dispatch<React.SetStateAction<LoadmoreCursor>>;
   setInvalidFile: React.Dispatch<React.SetStateAction<boolean>>;
+  fileValidator: (file: File) => boolean;
+  fileHandler: (
+    file: File,
+    setWorkbook: React.Dispatch<React.SetStateAction<Sheets[]>>,
+    setRenderedTableContent: React.Dispatch<
+      React.SetStateAction<ArrayOfNumberAndString>
+    >,
+    setLoadmoreCursor: React.Dispatch<React.SetStateAction<LoadmoreCursor>>
+  ) => void;
 };

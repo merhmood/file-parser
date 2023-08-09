@@ -4,6 +4,8 @@ import { useState } from 'react';
 import { DropZoneProps } from '@/types/sheetDropZoneTypes';
 import checkFile from '@/utilities/checkFile';
 import styles from '@/components/SheetUploadDropZone.module.css';
+import fileValidator from '@/utilities/fileValidator';
+import fileHandler from '@/utilities/fileHandler';
 
 export default function DropZone(props: DropZoneProps) {
   const {
@@ -22,6 +24,8 @@ export default function DropZone(props: DropZoneProps) {
     setTableContent,
     setLoadmoreCursor,
     setInvalidFile,
+    fileHandler,
+    fileValidator,
   };
 
   const fileUploadHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
