@@ -5,6 +5,7 @@ function checkFileHelper() {
   let result = {
     file: stubFile,
     fileValidator: jest.fn(),
+    fileHandler: jest.fn(),
     setWorkbook: jest.fn(),
     setTableContent: jest.fn(),
     setLoadmoreCursor: jest.fn(),
