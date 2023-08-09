@@ -8,7 +8,7 @@ test('check filevalidator is called with file', () => {
   expect(mockFileValidator).toHaveBeenCalledWith(fakeCheckFileParameters.file);
 });
 
-test('check if isvalid block calls functions with correct parameters', () => {
+test('check if functions is called with the correct parameters when isValid true', () => {
   const fakeCheckFileParameters: any = checkFileHelper();
   const mockFileHandler = fakeCheckFileParameters.fileHandler;
   const mockSetInvalidFile = fakeCheckFileParameters.setInvalidFile;
@@ -20,11 +20,24 @@ test('check if isvalid block calls functions with correct parameters', () => {
     fileValidator: stubfileValidator,
   });
 
-  expect(mockFileHandler).toBeCalledWith(
-    fakeCheckFileParameters.file,
-    fakeCheckFileParameters.setWorkbook,
-    fakeCheckFileParameters.setTableContent,
-    fakeCheckFileParameters.setLoadmoreCursor
-  );
+  expect(mockFileHandler).toBeCalledWith({
+    ...fakeCheckFileParameters,
+    fileValidator: stubfileValidator,
+  });
   expect(mockSetInvalidFile).toBeCalledWith(false);
+});
+
+test('check if functions is called with the correct parameters when isValid false', () => {
+  const fakeCheckFileParameters: any = checkFileHelper();
+  const mockSetTableContent = fakeCheckFileParameters.setTableContent;
+  const mockSetInvalidFile = fakeCheckFileParameters.setInvalidFile;
+  const stubfileValidator = () => false;
+  checkFile({
+    ...fakeCheckFileParameters,
+    setTableContent: mockSetTableContent,
+    setInvalidFile: mockSetInvalidFile,
+    fileValidator: stubfileValidator,
+  });
+  expect(mockSetTableContent).toBeCalledWith([]);
+  expect(mockSetInvalidFile).toBeCalledWith(true);
 });

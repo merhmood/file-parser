@@ -1,33 +1,26 @@
-import {
-  ArrayOfNumberAndString,
-  Sheets,
-  LoadmoreCursor,
-} from '@/types/sheetDropZoneTypes';
+import { FileHandlerParameters } from '@/types/sheetDropZoneTypes';
 
 import parseWorkbook from './parseWorkbook';
 import loadMoreHandler from './loadMoreContentHandler';
 
 export default function fileHandler(
-  file: File,
-  setWorkbook: React.Dispatch<React.SetStateAction<Sheets[]>>,
-  setRenderedTableContent: React.Dispatch<
-    React.SetStateAction<ArrayOfNumberAndString>
-  >,
-  setLoadmoreCursor: React.Dispatch<React.SetStateAction<LoadmoreCursor>>
+  fileHandlerParameters: FileHandlerParameters
 ) {
+  const { file, fileReader, setLoadmoreCursor, setTableContent, setWorkbook } =
+    fileHandlerParameters;
   if (file) {
-    let reader = new FileReader();
+    let reader = new fileReader();
     reader.onload = (e) => {
       if (e.target?.result && typeof e.target.result !== 'string') {
         const data = new Uint8Array(e.target.result);
         const parseWorkbookData = parseWorkbook(data);
         setWorkbook(parseWorkbookData);
         // Mounts an empty list
-        setRenderedTableContent([]);
+        setTableContent([]);
         // Updates the empty list with newly upload contents,
         // which will be limited to 50 elements
         setTimeout(() => {
-          setRenderedTableContent(() =>
+          setTableContent(() =>
             loadMoreHandler(parseWorkbookData, [], {
               current: 1,
               next: 50,

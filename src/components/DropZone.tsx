@@ -31,14 +31,14 @@ export default function DropZone(props: DropZoneProps) {
   const fileUploadHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       const file = e.target.files[0];
-      checkFile({ file, ...checkFileData });
+      checkFile({ file, fileReader: FileReader, ...checkFileData });
     }
   };
 
   const fileDropHandler = (e: React.DragEvent) => {
     dragLeave(e);
     const file = e.dataTransfer.files[0];
-    checkFile({ file, ...checkFileData });
+    checkFile({ file, fileReader: FileReader, ...checkFileData });
   };
 
   const withinDropZone = (e: React.DragEvent) => {

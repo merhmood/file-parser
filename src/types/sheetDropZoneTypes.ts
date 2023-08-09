@@ -33,19 +33,29 @@ export type TableSectionProps = {
   setLoadmoreCursor: React.Dispatch<React.SetStateAction<LoadmoreCursor>>;
 };
 
-export type CheckFileParameter = {
+type FileReaderType = {
+  new (): FileReader;
+  prototype: FileReader;
+  readonly EMPTY: 0;
+  readonly LOADING: 1;
+  readonly DONE: 2;
+};
+
+export type CheckFileParameters = {
   file: File;
   setWorkbook: React.Dispatch<React.SetStateAction<Sheets[]>>;
   setTableContent: React.Dispatch<React.SetStateAction<ArrayOfNumberAndString>>;
   setLoadmoreCursor: React.Dispatch<React.SetStateAction<LoadmoreCursor>>;
   setInvalidFile: React.Dispatch<React.SetStateAction<boolean>>;
+  fileReader: FileReaderType;
   fileValidator: (file: File) => boolean;
-  fileHandler: (
-    file: File,
-    setWorkbook: React.Dispatch<React.SetStateAction<Sheets[]>>,
-    setRenderedTableContent: React.Dispatch<
-      React.SetStateAction<ArrayOfNumberAndString>
-    >,
-    setLoadmoreCursor: React.Dispatch<React.SetStateAction<LoadmoreCursor>>
-  ) => void;
+  fileHandler: (fileHandlerParameters: FileHandlerParameters) => void;
+};
+
+export type FileHandlerParameters = {
+  file: File;
+  setWorkbook: React.Dispatch<React.SetStateAction<Sheets[]>>;
+  setTableContent: React.Dispatch<React.SetStateAction<ArrayOfNumberAndString>>;
+  setLoadmoreCursor: React.Dispatch<React.SetStateAction<LoadmoreCursor>>;
+  fileReader: FileReaderType;
 };
