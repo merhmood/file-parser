@@ -1,5 +1,5 @@
 {
   "root": true,
-  "env": { "browser": true, "es5": true, "jest": true },
+  "env": { "browser": true, "node": true, "jest": true },
   "extends": "next/core-web-vitals"
 }
