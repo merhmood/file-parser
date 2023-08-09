@@ -12,21 +12,21 @@ export default function TableSection(props: TableSectionProps) {
     setLoadmoreCursor,
   } = props;
   return (
-    <section className={styles['table-section']}>
-      <table className={styles.table}>
-        <tr>
+    tableContent.length > 0 && (
+      <section className={styles['table-section']}>
+        <table className={styles.table}>
+          <tr>
+            {
+              // Renders the table header
+              workbook[0].rows[0].map((head) => (
+                <th key={head} className={styles.th}>
+                  {head}
+                </th>
+              ))
+            }
+          </tr>
           {
-            // Renders the table header
-            workbook[0].rows[0].map((head) => (
-              <th key={head} className={styles.th}>
-                {head}
-              </th>
-            ))
-          }
-        </tr>
-        {
-          // Renders the table body
-          tableContent.length > 0 &&
+            // Renders the table body
             tableContent.map((element) => {
               const newElement = element;
               return (
@@ -39,20 +39,21 @@ export default function TableSection(props: TableSectionProps) {
                 </tr>
               );
             })
-        }
-      </table>
-      {!loadmoreCursor.endOfFile && tableContent.length > 0 && (
-        <LoadMoreButton
-          {...{
-            setTableContent,
-            workbook,
-            tableContent,
-            loadmoreCursor,
-            increaseOffset: () =>
-              increaseOffset(loadmoreCursor, setLoadmoreCursor, workbook),
-          }}
-        />
-      )}
-    </section>
+          }
+        </table>
+        {!loadmoreCursor.endOfFile && (
+          <LoadMoreButton
+            {...{
+              setTableContent,
+              workbook,
+              tableContent,
+              loadmoreCursor,
+              increaseOffset: () =>
+                increaseOffset(loadmoreCursor, setLoadmoreCursor, workbook),
+            }}
+          />
+        )}
+      </section>
+    )
   );
 }
