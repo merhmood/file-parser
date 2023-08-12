@@ -4,7 +4,7 @@ import {
   LoadmoreCursor,
 } from '@/types/sheetDropZoneTypes';
 
-export default function loadMoreHandler(
+export default function loadMoreContentHandler(
   workbook: Sheets[],
   tableContent: ArrayOfNumberAndString,
   loadmoreCursor: LoadmoreCursor
@@ -16,7 +16,8 @@ export default function loadMoreHandler(
     start <= loadmoreCursor.next;
     start++
   ) {
-    result.push(workbook[0]?.rows[start]);
+    if (workbook[0]) result.push(workbook[0].rows[start]);
+    else throw new Error('workbook missing from parameters or not an array');
   }
   return result;
 }
