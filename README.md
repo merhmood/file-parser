@@ -1,8 +1,17 @@
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
-visit [app](https://app-with-many-feats.netlify.app) to see the deployed app
+click [link](https://app-with-many-feats.netlify.app) to see the deployed app
+
+## Development
+Run the following commands in your CLI
+```
+cd app-with-many-features-client
+npm install
+npm run dev
+```
 
 ## Available paths
 
 - file-upload
 - image-upload
+
