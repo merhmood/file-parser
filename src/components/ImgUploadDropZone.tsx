@@ -4,12 +4,12 @@
  * Upload component
  */
 
-'use client';
+"use client";
 
-import { useEffect, useRef, useState } from 'react';
-import Image from 'next/image';
+import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 
-import styles from './ImgUploadDropZone.module.css';
+import styles from "./ImgUploadDropZone.module.css";
 
 type ImgUploadDropZoneFileObject = {
   img: File | null;
@@ -20,11 +20,11 @@ type ImgUploadDropZoneFileObject = {
 export default function ImgUploadDropZone() {
   const [imgObject, setImgObject] = useState<ImgUploadDropZoneFileObject>({
     img: null,
-    imgUrl: '',
-    imgName: '',
+    imgUrl: "",
+    imgName: "",
   });
   const [imgDropZoneEnter, setImgDropZoneEnter] = useState(false);
-  const [imgUploadIcon, setImgUploadIcon] = useState('/image (1).png');
+  const [imgUploadIcon, setImgUploadIcon] = useState("/image (1).png");
   const [invalidImgFile, setInvalidImgFile] = useState(false);
   const imgUploadRef = useRef<HTMLInputElement>(null);
 
@@ -52,6 +52,7 @@ export default function ImgUploadDropZone() {
   };
 
   const imgDropHandler = (e: React.DragEvent) => {
+    console.log(e.dataTransfer.files);
     dragLeave(e);
     const img = e.dataTransfer.files[0];
     const isValid = imgFileValidator(img);
@@ -72,11 +73,11 @@ export default function ImgUploadDropZone() {
     // highlight color and image
     preventDefault(e);
     setImgDropZoneEnter(true);
-    setImgUploadIcon('/image.png');
+    setImgUploadIcon("/image.png");
     setImgObject({
       img: null,
-      imgUrl: '',
-      imgName: '',
+      imgUrl: "",
+      imgName: "",
     });
   };
 
@@ -85,7 +86,7 @@ export default function ImgUploadDropZone() {
     // to their initial color && image
     preventDefault(e);
     setImgDropZoneEnter(false);
-    setImgUploadIcon('/image (1).png');
+    setImgUploadIcon("/image (1).png");
   };
 
   const preventDefault = (e: React.DragEvent) => {
@@ -96,17 +97,13 @@ export default function ImgUploadDropZone() {
     e.preventDefault();
   };
 
-  useEffect(() => {
-    console.log(imgObject);
-  });
-
   return (
     <>
       <div
         className={
           !imgDropZoneEnter
-            ? styles['img-upload-drop-zone']
-            : `${styles['img-upload-drop-zone']} ${styles['highlight']}`
+            ? styles["img-upload-drop-zone"]
+            : `${styles["img-upload-drop-zone"]} ${styles["highlight"]}`
         }
         onDrop={imgDropHandler}
         onDragEnd={preventDefault}
@@ -119,14 +116,14 @@ export default function ImgUploadDropZone() {
           // eslint-disable-next-line @next/next/no-img-element
           <img
             src={imgUploadIcon}
-            alt='img-drop-zone'
+            alt="img-drop-zone"
             onClick={imgDropZoneClickHandler}
           />
         }
 
         <p>Drop file here or click on image to upload file</p>
         <input
-          type='file'
+          type="file"
           ref={imgUploadRef}
           onChange={imgUploadHandler}
           multiple
@@ -141,11 +138,13 @@ export default function ImgUploadDropZone() {
 }
 
 function imgFileValidator(file: File) {
-  const fileType = file.type.split('/');
-  if (fileType[0] === 'image') {
-    return true;
-  } else {
-    return false;
+  if (file) {
+    const fileType = file.type.split("/");
+    if (fileType[0] === "image") {
+      return true;
+    } else {
+      return false;
+    }
   }
 }
 
@@ -159,10 +158,10 @@ function Upload({ imgObject, styles }: UploadProps) {
     <div className={styles.upload}>
       <Image
         src={imgObject.imgUrl}
-        alt=''
+        alt=""
         width={100}
         height={100}
-        className={styles['upload-img']}
+        className={styles["upload-img"]}
       />
       <p>{imgObject.imgName}</p>
     </div>
