@@ -1,6 +1,6 @@
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
-click [link](https://app-with-many-feats.netlify.app) to see the deployed app
+click [link](https://fileparser.merhmood.me) to see the deployed app
 
 ## Development
 Run the following commands in your CLI
